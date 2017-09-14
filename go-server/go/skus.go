@@ -111,8 +111,8 @@ func CreateSkuCommand(w http.ResponseWriter, r *http.Request) {
 		TableName:              aws.String("Sku"),
 	}
 
+	//SendToSNS(string(b))
 	GetFromSNS()
-	SendToSNS(string(b))
 	DynamoPutItem(log, dyn, input)
 
 }
