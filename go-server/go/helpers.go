@@ -192,15 +192,15 @@ func SendToSNS(s string) {
 	fmt.Println(resp)
 }
 
-func GetFromSNS() {
+func GetFromSNS() (resp *sqs.ReceiveMessageOutput) {
 	svc := sqs.New(session.New())
 	params := &sqs.ReceiveMessageInput{
 		QueueUrl: aws.String("https://sqs.eu-west-1.amazonaws.com/460402331925/test-svp-sqs-1"),
 	}
 	resp, err := svc.ReceiveMessage(params)
-
 	if err != nil {
 		fmt.Println("error getting data from queue : ", err)
 	}
-	fmt.Println("This is params -->", resp)
+	//fmt.Println("This is params -->", resp)
+	return resp
 }

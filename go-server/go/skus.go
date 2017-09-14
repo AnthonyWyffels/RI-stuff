@@ -112,7 +112,9 @@ func CreateSkuCommand(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//SendToSNS(string(b))
-	GetFromSNS()
+	resp := GetFromSNS()
+	json.Marshal(resp)
+	fmt.Println("This is resp --->", resp)
 	DynamoPutItem(log, dyn, input)
 
 }
