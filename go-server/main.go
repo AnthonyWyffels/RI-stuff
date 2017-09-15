@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	log.Printf("Server started, don't forget to SET AWS_REGION=eu-west-1")
+	log.Printf("Server started")
 
 	router := sw.NewRouter()
 

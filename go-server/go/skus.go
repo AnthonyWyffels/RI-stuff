@@ -92,7 +92,7 @@ func CreateSkuCommand(w http.ResponseWriter, r *http.Request) {
 
 	//store in b the Body of the POST Request
 	b, _ := ioutil.ReadAll(r.Body)
-
+	fmt.Println("this is string b", string(b))
 	// create empty sku
 	sku := Sku{}
 	//convert b to string
@@ -100,10 +100,10 @@ func CreateSkuCommand(w http.ResponseWriter, r *http.Request) {
 	if err2 != nil {
 		fmt.Println("something went wrong", err2) //print error
 	}
-
+	//fmt.Println("this is sku", sku)
 	//converting to dynomodb format
 	av, _ := dynamodbattribute.MarshalMap(sku)
-	fmt.Println("this is av", av)
+	//fmt.Println("this is av", av)
 
 	input := &dynamodb.PutItemInput{
 		Item: av,
@@ -111,10 +111,8 @@ func CreateSkuCommand(w http.ResponseWriter, r *http.Request) {
 		TableName:              aws.String("Sku"),
 	}
 
-	//SendToSNS(string(b))
-	resp := GetFromSNS()
-	json.Marshal(resp)
-	fmt.Println("This is resp --->", resp)
+	SendToSNS(string(b))
+	GetFromSNS()
 	DynamoPutItem(log, dyn, input)
 
 }

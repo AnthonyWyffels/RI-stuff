@@ -142,22 +142,8 @@ func DynamoGetItem(log *logrus.Logger, svc *dynamodb.DynamoDB, input *dynamodb.G
 	return
 }
 
-// func GetUrPollinglOutput(s string) {
-// 	p := sqs.New(session.New())
-// 	params := &sqs.GetQueueUrlOutput{
-// 		QueueUrl: aws.String("test-svp-sqs-1"),
-// 	}
-// 	resp, _ :=
-// 	fmt.Println("this is params : ", params)
-// 	fmt.Println("this is resp : ", resp)
-// }
-//
-// func fewdfw(msg *sqs.Message){
-//
-// }
-
 //allows to access any part of the json file and change it
-func findInString(w http.ResponseWriter, s string, data []byte) {
+func findInString(w http.ResponseWriter, s string, data []byte) (value []string) {
 
 	re := regexp.MustCompile(s)
 	val := re.FindAllString(string(data), -1) //finds all the string "sku". val is the part of the string so it can be used to access it
@@ -176,15 +162,17 @@ func findInString(w http.ResponseWriter, s string, data []byte) {
 	//replacedS := re.ReplaceAllString(string(data), string("thisisnoMoreSku")) //replace all string "sku" by "thisisnoMoreSku"
 	//fmt.Fprintf(w, replacedS)
 	fmt.Println("Here is variable val: ", val, -1)
+	return val
 }
 
 //connecting to sns
 func SendToSNS(s string) {
 	svc := sns.New(session.New())
 	params := &sns.PublishInput{
-		//Message:  aws.String(s), //uncomment
+		Message:  aws.String(s), //uncomment
 		TopicArn: aws.String("arn:aws:sns:eu-west-1:460402331925:test-svp-general-messages"),
 	}
+	//id := svc
 	resp, err := svc.Publish(params)
 	if err != nil {
 		fmt.Println("Error connecting to sns", err)
@@ -195,11 +183,13 @@ func SendToSNS(s string) {
 func GetFromSNS() (resp *sqs.ReceiveMessageOutput) {
 	svc := sqs.New(session.New())
 	params := &sqs.ReceiveMessageInput{
+
 		QueueUrl: aws.String("https://sqs.eu-west-1.amazonaws.com/460402331925/test-svp-sqs-1"),
+		//QueueUrl: aws.String("sqs.eu-west-1.amazonaws.com/460402331925/test-svp-sqs-1"),
 	}
 	resp, err := svc.ReceiveMessage(params)
 	if err != nil {
-		fmt.Println("error getting data from queue : ", err)
+		fmt.Println("error getting data from queue", err)
 	}
 	//fmt.Println("This is params -->", resp)
 	return resp
