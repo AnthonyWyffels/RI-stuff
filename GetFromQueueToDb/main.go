@@ -15,8 +15,6 @@ import (
 type Struct struct {
 }
 
-//the imports necessary
-
 func main() {
 	dyn := ConnectDynamo()
 	log := logrus.New()
@@ -44,12 +42,11 @@ func main() {
 			ReturnConsumedCapacity: aws.String("TOTAL"),
 			TableName:              aws.String(*tableName),
 		}
-		//input is empty
-		fmt.Println("This is input", input)
+
+		//fmt.Println("This is input", input)
 		DynamoPutItem(log, dyn, input)
 
 		time.Sleep(10 * time.Second) //pause for 10 seconds
-		//pause until detects msg
 
 		b = true
 	}
